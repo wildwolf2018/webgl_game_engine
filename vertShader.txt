@@ -1,0 +1,16 @@
+precision highp float;
+
+attribute vec3 vPosition;
+attribute vec2 vTexCoords;
+
+uniform mat4 mWorld;
+uniform mat4 mView;
+uniform mat4 mProj;
+
+varying vec2 TextCoords;
+
+void main()
+{
+	TextCoords = vTexCoords;
+	gl_Position = mProj * mView * mWorld * vec4(vPosition, 1.0);
+}

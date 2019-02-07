@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="eng">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Maths Test</title>
+	</head>
+	<body>
+		<script type="text/javascript" src="vector3.js"></script>
+		<script type="text/javascript" src="matrix3.js"></script>
+		<script type="text/javascript" src="matrix4.js"></script>
+		<script type="text/javascript" src="quaternion.js"></script>
+		<script type="text/javascript">
+			let vecA = new vector(1, 0, 0);
+			let axis = new vector(0, 0, 1);
+			let angle = 270.0;
+			let rotationQuat1 = Quaternion.createRotationQuat(axis, 180.0);
+			let rotationQuat2 = Quaternion.createRotationQuat(axis, 90.0);
+			let rotationQuat =  Quaternion.multiply(rotationQuat1, rotationQuat2);
+			let result = Quaternion.rotateVector(vecA, rotationQuat);
+
+			document.write(`${(result.x)} |  ${(result.y)} | ${(result.z)}<br/>`);
+			//let vecB = new vector(3,- 4, 1);
+		//	let result = vector.cross(vecA, vecB);
+		//	document.write('x = ', result.x, '   y = ', result.y, '    z = ', result.z);
+ 			//var myvec = new Float32Array([1, 1, 1]);
+			//document.write(vec3.magnitude(myvec), '</br>');
+
+		//	myvec.normalize();
+		//	var b = new Vector3(1, 2, 3);
+			//document.write('x = ', myvec.x, ' y = ', myvec.y, 'z = ', myvec.z, ' dot = ', myvec.dot(b));
+		//	var result = myvec.cross(b);
+			//document.write('  cross ', result.x);
+
+//			var c = new Vector3(0, 0 ,0);
+		//	vec3.add(myvec, b, c);
+			//document.write('<br/>x = ', c.x, ' y = ', c.y, 'z = ', c.z);
+
+		/*	 var inverse = new Float32Array(9);
+			var a = [1, 2, 3,
+					 2, 4, 5,
+					 3, 5, 6];
+			matrix3.inverse(a, inverse);*/
+			// var b = [5, 0, 0,
+			// 		 0, 3,0,
+			// 		 0, 0,2];
+
+			// var c = [0, 1, 4,
+			// 		 1, 0,-3,
+			// 		 2, 3,8];
+
+			// var d = [1, -3, 2,
+			// 		 0, 1,-3,
+			// 		 -2, 4,4];
+			var d =[1, 1, 1, 1, 
+					1, 2, -1, 2, 
+					1, -1, 2, 1,
+					 1, 3, 3, 2];
+			let rotMatrix = new Float32Array(16);
+			rotationQuat.setRotationMatrix(rotMatrix);
+
+			let x = rotMatrix[0] * vecA.x + rotMatrix[4] * vecA.y + rotMatrix[8] * vecA.z;
+			let y = rotMatrix[1] * vecA.x + rotMatrix[5] * vecA.y + rotMatrix[9] * vecA.z;
+			let z = rotMatrix[2] * vecA.x + rotMatrix[6] * vecA.y + rotMatrix[10] * vecA.z;
+			let v = new vector(x.toFixed(2),y.toFixed(2), z.toFixed(2));
+			document.write(`${(v.x)} |  ${(v.y)} | ${(v.z)}<br/>`);
+
+/*
+			var D = new Float32Array(d);
+			var inverse = new Float32Array(16);
+			matrix4.inverse(D, inverse);
+			 var A = new Float32Array(a);
+			// var B = new Float32Array(b);
+			// matrix3.multiply(A, B, product);
+			document.write(inverse[0] + '  |  ' +inverse[4] + '  |  ' +inverse[8] + '  |  ' + inverse[12] + '<br/>');
+			document.write(inverse[1] + '  | ' +inverse[5] + '  | ' +inverse[9] + '  |  ' +inverse[13] +'<br/>');
+			document.write(inverse[2] + '  | ' +inverse[6] + '  | ' +inverse[10] +  '  |  '  +inverse[14] +'<br/>');
+			document.write(inverse[3] + '  | ' +inverse[7] + '  | ' +inverse[11] +  '  |  ' + inverse[15] +'<br/><br/>');*/
+
+			// var transpose = new Float32Array(9);
+			// matrix3.transpose(product,transpose);
+			// document.write(transpose[0] + ' ' +transpose[3] + ' ' +transpose[6] + '<br/>');
+			// document.write(transpose[1] + ' ' +transpose[4] + ' ' +transpose[7] + '<br/>');
+			// document.write(transpose[2] + ' ' +transpose[5] + ' ' +transpose[8] + '<br/><br/>');
+
+			// var matA = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+			// var matB = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+			//  var product_ = new Float32Array(16);
+			//  matrix4.multiply(matA, matB, product_);
+			// document.write(product_[0] + ' ' + product_[4] + ' ' + product_[8] + ' ' + product_[12] + '<br/>');
+			// document.write(product_[1] + ' ' + product_[5] + ' ' + product_[9] + ' ' + product_[13] + '<br/>');
+			// document.write(product_[2] + ' ' + product_[6] + ' ' + product_[10] + ' ' + product_[14] + '<br/>');
+			// document.write(product_[3] + ' ' + product_[7] + ' ' + product_[11] + ' ' + product_[15] + '<br/>');
+
+		</script>
+	</body>
+</html>
