@@ -1,2 +1,1 @@
-# webgl_game_engine
-A simple game engine  for WebGL games 
+The engine is written in Javascript and utilises the WebGL API. 
