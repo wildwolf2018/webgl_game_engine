@@ -11,6 +11,7 @@ function start()
 {
 	worldMatrix = new Float32Array(16);
 	mat4.identity(worldMatrix);
+
 	identityMatrix = new Float32Array(16);
 	mat4.identity(identityMatrix);
 	angle = 45;
@@ -48,5 +49,8 @@ function init(){
 	textureObj.loadTexture();
 	triangleShader.makeProgram("vertShader.txt", "fragShader.txt");
 	var delay = 150;
+	if(navigator.userAgent.indexOf("Firefox") != -1){
+		delay = 450;
+	}
 	setTimeout(start, delay);
 }

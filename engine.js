@@ -21,7 +21,8 @@ var  engine = {
 		let target = new vector(0.0, 0.0, 0.0);
 		let worldUp = new vector(0.0, 1.0, 0.0);
 		matrix4.Calculate_LookAt_Matrix(this.viewMatrix, position, target, worldUp);
-		mat4.perspective(this.projectionMatrix, glMatrix.toRadian(45), this.canvas.width/this.canvas.height, 0.1, 1000.0);
+		matrix4.Calculate_Perspective_Matrix(this.projectionMatrix, glMatrix.toRadian(45), 
+			this.canvas.width/this.canvas.height, 0.1, 1000.0);
 	},
 
 	update : function(){

@@ -122,4 +122,37 @@ class matrix4
 		viewMatrix[12] = -1 * position.x; viewMatrix[13] = -1 * position.y; viewMatrix[14] = -1 * position.z; 
 		viewMatrix[15] = 1.0;
 	}
+
+	static Calculate_Perspective_Matrix(matrix, verticalViewAngle, aspectRatio, nearPlaneDistance, farPlaneDistance)
+	{
+		let top = Math.tan(verticalViewAngle/2) * nearPlaneDistance;
+		let bottom = -1 * top;
+		let right = top * aspectRatio;
+		let left = -1 * right;
+
+		let rigthMinusLeft = right - left;
+		let topMinusBottom = top - bottom;
+		let farMinusNear = farPlaneDistance - nearPlaneDistance;
+		let doubleNear = 2 * nearPlaneDistance;
+
+		matrix[0] = doubleNear / rigthMinusLeft; matrix[1] = 0.0; matrix[2] = 0.0; matrix[3] = 0.0;
+		matrix[4] = 0.0; matrix[5] = doubleNear / topMinusBottom; matrix[6] = 0.0; matrix[7] = 0.0;
+		matrix[8] = (right + left) / rigthMinusLeft; matrix[9] = (top + bottom) / topMinusBottom;
+				 matrix[10] = -1 * (farPlaneDistance + nearPlaneDistance) / farMinusNear; matrix[11] = -1.0;
+		matrix[12] = 0; matrix[13] = 0; 
+		matrix[14] = (-2.0 * farPlaneDistance * nearPlaneDistance) / farMinusNear; matrix[15] = 0.0;
+	}
+
+	static Calculate_Orthographic_Matrix(matrix, left, right, bottom, top, near, far)
+	{
+		let rigthMinusLeft = right - left;
+		let topMinusBottom = top - bottom;
+		let farMinusNear = far - near;
+
+		matrix[0] = 2 / rigthMinusLeft; matrix[1] = 0.0; matrix[2] = 0.0; matrix[3] = 0.0;
+		matrix[4] = 0.0; matrix[5] = 2 / topMinusBottom; matrix[6] = 0.0; matrix[7] = 0.0;
+		matrix[8] = 0.0; matrix[9] = 0.0; matrix[10] = -2.0 / farMinusNear; matrix[11] = 0.0;
+		matrix[12] = -1.0 * (right + left) / rigthMinusLeft; matrix[13] = -1.0 * (top + bottom) / topMinusBottom; 
+		matrix[14] = -1.0 * (far + near) / farMinusNear; matrix[15] = 1.0;
+	}
 }
