@@ -102,6 +102,32 @@ class matrix4
 			modelMatrix[i] = product[i];
 		}
 	}
+	static rotate(matrix, angle, axis){
+		let theta = degreesToRadians(angle);
+		let c = Math.cos(theta); 
+		let s = Math.sin(theta); 
+		let d = 1.0 - c; 
+		let x = axis.x * d; 
+
+		let y = axis.y * d;
+		let z = axis.z * d; 
+		let axay = x * axis.y; 
+		let axaz = x * axis.z; 
+		let ayaz = y * axis.z; 
+
+		matrix[0] = c + x * axis.x;
+		matrix[1] = axay -s * axis.z;
+		matrix[2] = axaz + s * axis.y; matrix[3] = 0.0;
+		matrix[4] = axay + s * axis.z; 
+		matrix[5] = c + y* axis.y;
+		matrix[6] =  ayaz - s * axis.x; matrix[7] = 0.0;
+		matrix[8] = axaz - s * axis.y;
+		matrix[9] = ayaz + s * axis.x;
+		matrix[10] = c+ z * axis.z;
+		matrix[11] = 0.0;  matrix[12] = 0.0;  matrix[13] = 0.0;
+		matrix[14] = 0.0;  matrix[15] = 0.1;
+	}
+
 	static Calculate_LookAt_Matrix(viewMatrix, position, target, worldUp){
 		//Calculate camera direction
 		let zaxis =  (vector.subtract(position, target)).normalize();

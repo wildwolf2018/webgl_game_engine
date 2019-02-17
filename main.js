@@ -14,34 +14,46 @@ function start()
 
 	identityMatrix = new Float32Array(16);
 	mat4.identity(identityMatrix);
-	angle = 45;
+	angle = 0;
 	skyTexture = textures['blue_sky'];
 	shader = shaderPrograms['triangle'];
-	triangle = new Triangle(gl, engine.ext, shader.programID);
+	triangle = new Triangle(gl, renderer.ext, shader.programID);
 	triangle.init();
 	gl.enable(gl.DEPTH_TEST);
-	renderLoop();
+	last = Date.now();
+	renderLoop(last);
 }
 
 //Render loop
-var renderLoop = function(){
-		angle = performance.now() / 1000 / 3 * 2 * Math.PI;
-		engine.renderStart();
-		engine.update();
-		triangle.update(shader, worldMatrix, angle);
-		skyTexture.bind(gl.TEXTURE0);
-		shader.setTextureUniform('uSampler', 0);
-		engine.renderStart();
-		triangle.draw();
-		skyTexture.unbind();
-		requestAnimationFrame(renderLoop);
+var renderLoop = function(last){
+	let velocity = -1.25, scale = 1e-12;
+	let current = Date.now();
+	renderer.deltaTime = (current - last) * scale;
+	angle +=  velocity * renderer.deltaTime;
+	last = current;
+	
+	renderer.update();
+	triangle.update(angle);
+
+	shader.use();
+	triangle.setMatrixUniforms(shader);
+	shader.setMatrixUniform('mView',renderer.cam.viewMatrix);
+	shader.setMatrixUniform('mProj', renderer.projectionMatrix);
+	skyTexture.bind(gl.TEXTURE0);
+	shader.setTextureUniform('uSampler', 0);
+
+	renderer.renderStart();
+	triangle.draw();
+	skyTexture.unbind();
+	
+	requestAnimationFrame(renderLoop);
 };
 
 //Called when body of HTML document has been loaded
 function init(){
 	console.log('Running');
-	engine.initialize();
-	gl = engine.gl;
+	renderer = new RenderManager("game_canvas");
+	gl = renderer.gl;
 	shaderName = 'triangle';
 	var triangleShader = new CreateShader(gl);
 	textureName = 'blue_sky';
