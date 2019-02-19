@@ -52,6 +52,7 @@ class KeyBoard
 		this.buttonsUp[key] = false;
 		return state;
 	}
+	
 	//Gets the current state of the button
 	buttonState(key)
 	{
