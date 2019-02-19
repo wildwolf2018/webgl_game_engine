@@ -13,6 +13,7 @@ var loadShaderFromFile = function(url, callback){
 	request.send();
 }
 
+//Creates a texture object
 function Texture(filename, wrappingModeS, wrappingModeT, minFilteringMode, magFilteringMode)
 {
 	this.filename = filename;
@@ -51,6 +52,8 @@ var texture2D = {
 	}
 }; 
 
+//Shader program class for querying information about shader object
+//and sending data to the shaders
 function ShaderProgram(program) 
 {  
 	this.programID = program;
@@ -67,8 +70,7 @@ function ShaderProgram(program)
 	};
 }
 
-//Inserts program into shader program array
-//0 -> triangle
+//Stores a shader program into shader program array
 var storeProgram = function(program){
 	var _shader = new ShaderProgram(program);
 	shaderPrograms[shaderName] = _shader;

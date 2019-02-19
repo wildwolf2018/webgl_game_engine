@@ -1,6 +1,8 @@
 class matrix4
 {
 	constructor(){}
+
+	//Calculates the product of two 4x4 matrices
 	static multiply(matrixA, matrixB, product){
 		product[0] = matrixA[0] * matrixB[0] + matrixA[4] * matrixB[1] + matrixA[8] * matrixB[2] + 
 							matrixA[12] * matrixB[3];
@@ -35,6 +37,8 @@ class matrix4
 		product[15] = matrixA[3] * matrixB[12] + matrixA[7] * matrixB[13] + matrixA[11] * matrixB[14] + 
 							matrixA[15] * matrixB[15];
 	}
+
+	//Calculates the inverse of a 4x4 matrix
 	static inverse(matrix, inverse){
 		let x = matrix[12], y = matrix[13], z = matrix[14], w = matrix[15];
 		let a = new vector(matrix[0], matrix[4], matrix[8]), b = new vector(matrix[1], matrix[5], matrix[9]);
@@ -68,12 +72,16 @@ class matrix4
 		inverse[13] = vector.dot(a, t) * invDet; inverse[14] = -1 * vector.dot(d, s) * invDet; 
 		inverse[15] = vector.dot(c, s) * invDet; 
 	}
+
+	//Calculates a 4x4	identity matrix
 	static identity(matrix){
 		matrix[0] = 1; matrix[4] = 0; matrix[8] = 0; matrix[12] = 0;
 		matrix[1] = 0; matrix[5] = 1; matrix[9] = 0; matrix[13] = 0;
 		matrix[2] = 0; matrix[6] = 0; matrix[10] = 1; matrix[14] = 0;
 		matrix[3] = 0; matrix[7] = 0; matrix[11] = 0; matrix[15] = 1;
 	}
+
+	//Calculates a translation matrix
 	static translate(modelMatrix, x, y, z){
 		let transMatrix = new Float32Array(16);
 		transMatrix[12] = x; transMatrix[13] = y; transMatrix[14] = z;
@@ -88,6 +96,8 @@ class matrix4
 			modelMatrix[i] = product[i];
 		}
 	}
+
+	//Calculates a 4x4 scale matrix
 	static scale(modelMatrix, x, y, z){
 		modelMatrix[0] = x; modelMatrix[5] = y; modelMatrix[10] = z; 
 		modelMatrix[1] = 0;modelMatrix[2] = 0;modelMatrix[3] = 0; modelMatrix[4] = 0;
@@ -95,6 +105,8 @@ class matrix4
 		modelMatrix[11] = 0; modelMatrix[12] = 0; modelMatrix[13] = 0; modelMatrix[14] = 0;
 		modelMatrix[15] = 1;
 	}
+
+	//Calculates a 4x4 rotation matrix
 	static rotate(matrix, angle, axis){
 		let theta = degreesToRadians(angle);
 		let c = Math.cos(theta); 
@@ -121,6 +133,8 @@ class matrix4
 		matrix[14] = 0.0;  matrix[15] = 0.1;
 	}
 
+	//Calculates the view matrix from given postion, look-at point and up vector
+	//of the camera
 	static Calculate_LookAt_Matrix(viewMatrix, position, target, worldUp){
 		//Calculate camera direction
 		let zaxis =  (vector.subtract(position, target)).normalize();
@@ -142,6 +156,7 @@ class matrix4
 		viewMatrix[15] = 1.0;
 	}
 
+	//Calculates the perspective projection matrix
 	static Calculate_Perspective_Matrix(matrix, verticalViewAngle, aspectRatio, nearPlaneDistance, farPlaneDistance)
 	{
 		let top = Math.tan(verticalViewAngle/2) * nearPlaneDistance;
@@ -162,6 +177,7 @@ class matrix4
 		matrix[14] = (-2.0 * farPlaneDistance * nearPlaneDistance) / farMinusNear; matrix[15] = 0.0;
 	}
 
+	//Calculates the orthographic projection matrix
 	static Calculate_Orthographic_Matrix(matrix, left, right, bottom, top, near, far)
 	{
 		let rigthMinusLeft = right - left;

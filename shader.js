@@ -12,6 +12,8 @@ CreateShader.prototype = {
 		loadShaderFromFile(vShaderFile, this.vLoadedShader);
 		loadShaderFromFile(fShaderFile, this.fLoadedShader);
 	},
+
+	//Compiles the shader object
 	compileShader: function(shaderText, shaderType){
 		var shaderObj = gl.createShader(shaderType);
 		gl.shaderSource(shaderObj, shaderText);
@@ -22,6 +24,8 @@ CreateShader.prototype = {
 		}
 		return shaderObj;
 	},
+
+	//Links and validates the shader object
 	linkProgram: function(vertShaderText, fragShaderText){
 		var programID = gl.createProgram();
 		var vShaderID = this.compileShader(vertShaderText, gl.VERTEX_SHADER);
@@ -46,6 +50,7 @@ CreateShader.prototype = {
 				storeProgram(this.program);
 			}
 	},
+	
 	fLoadedShader: function(str){	
 		var vertShaderStr = this.vShaderStr;
 		var fragShaderStr = str;

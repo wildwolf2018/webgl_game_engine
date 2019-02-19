@@ -2,53 +2,59 @@ class KeyBoard
 {
 	constructor(canvas)
 	{
-		thisbuttons[] = {'65': false, '68': false, '83': false, '87': false};
-		thisbuttonsDown[] = {'65': false, '68': false, '83': false, '87': false};
-		thisbuttonsUp[] = {'65': false, '68': false, '83': false, '87': false};
+		//Current state of the buttons
+		this.buttons[] = {'65': false, '68': false, '83': false, '87': false};
+		//Indicates which buttons are pressed during current frame
+		this.buttonsDown[] = {'65': false, '68': false, '83': false, '87': false};
+		//Indicates which buttons are released during current frame
+		this.buttonsUp[] = {'65': false, '68': false, '83': false, '87': false};
 		this.canvas = canvas;
-		this.canvas.onkeydown = function(event) {keydown(event);}
-		this.canvas.onkeyup = function(event) {keyup(event);}
-		this.keyReleased = false;
+		//Buttons' event handlers
+		this.canvas.onkeydown = function(event) {keyDown(event);}
+		this.canvas.onkeyup = function(event) {keyUp(event);}
 	}
 
-	keydown(event){ 
+	//Handles the event when a button is pressed
+	keyDown(event){ 
 		let char = String.fromChar(event.which);
 		if(char == '65' || char == '68' || char == '83' || char == '87'){
-			this.keyReleased = false;
-	}
-	keyup(event){
-		let char = String.fromChar(event.which);
-		if(char == '65' || char == '68' || char == '83' || char == '87'){
-			this.keyReleased = true;
-	}
-	keypress(){
-		let char = String.fromChar(event.which);
-		if(char == '65' || char == '68' || char == '83' || char == '87'){
-			if(this.keyReleased == false && thisbuttons[char] == false){
+			if(this.buttons[char] == false){
 				this.buttonsDown[char] = true;
 				this.buttonsUp[char] = false;
 			}
-			if(this.keyReleased == true && thisbuttons[char] == true){
-				thisbuttonsDown[char] = false;
-				thisbuttonsUp[char] = true;
-			}
-			this.buttons[char] = !this.keyReleased == true;
+			this.buttons[char] = true;
+			this.keyReleased = false;
 		}
 	}
 
-	isKeyDown(key)
+	//Handles the event when a button is released
+	keyUp(event){
+		let char = String.fromChar(event.which);
+		if(char == '65' || char == '68' || char == '83' || char == '87'){
+			if(this.buttons[char] == false){
+				this.buttonsDown[char] = false;
+				this.buttonsUp[char] = true;
+			}
+			this.buttons[char] = false;
+		}
+	}
+	
+	get isKeyDown(key)
 	{
 		let state = this.buttons[key];
-		this.buttonsDown = false;
+		this.buttonsDown[key] = false;
 		return state;
 	}
-
-	isKeyUp(key)
+	
+	get isKeyUp(key)
 	{
 		let state = this.buttons[key];
-		this.buttonsDown = false;
+		this.buttonsUp[key] = false;
 		return state;
 	}
-
-
+	//Gets the current state of the button
+	buttonState(key)
+	{
+		return this.buttons[key];
+	}
 }

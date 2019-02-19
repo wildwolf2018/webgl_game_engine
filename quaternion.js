@@ -6,11 +6,12 @@ class Quaternion
 		this.z = z;
 		this.w = w;
 	}
-
+	
 	static createQuaternion(vec3, s){
 		return new Quaternion(vec3.x, vec3.y, vec3.z, s);
 	}
 
+	//Calculates product of two quaternions
 	static multiply(q1, q2){
 		return new Quaternion(q1.x*q2.w + q1.y*q2.z - q1.z*q2.y + q1.w*q2.x,
 							q1.y*q2.w + q1.z*q2.x + q1.w*q2.y - q1.x*q2.z,
@@ -22,12 +23,14 @@ class Quaternion
 		return new vector(this.x, this.y, this.z);
 	}
 
+	//Calculates a unit quaternion
 	getUnitQuaterninon(){
 		let d_square = this.x*this.x + this.y*this.y + this.z*this.z + this.w*this.w;
 		let d = Math.sqrt(d_square);
 		return new Quaternion(this.x/d, this.y/d, this.z/d, this.w/d);
 	}
 
+	//Returns a quaternion that represents rotation around an arbitary axis
 	static createRotationQuat(axis, angleDegrees){
 		let rotationAxis = axis.normalize();
 		let halfAngle = degreesToRadians(angleDegrees) / 2;
@@ -37,6 +40,7 @@ class Quaternion
 			rotationAxis.z*halfSin, Math.cos(halfAngle));
 	}
 
+	//Returns the vector rotated by a quaternion
 	static rotateVector(vec3, quat){
 		let b = quat.getVectorPart();
 		let b2 = b.x * b.x + b.y * b.y + b.z * b.z;
@@ -50,6 +54,7 @@ class Quaternion
 					 (v1.z + v2.z + v3.z).toFixed(2));
 	}
 
+	//Calculates a rotation matrix from given quaternion
 	setRotationMatrix(matrix){
 		let x2 = this.x * this.x;
 		let y2 = this.y * this.y; 
