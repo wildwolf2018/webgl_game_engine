@@ -89,18 +89,11 @@ class matrix4
 		}
 	}
 	static scale(modelMatrix, x, y, z){
-		let scaleMatrix = new Float32Array(16);
-		scaleMatrix[0] = x; scaleMatrix[5] = y; scaleMatrix[10] = z; 
-		scaleMatrix[1] = 0;scaleMatrix[2] = 0;scaleMatrix[3] = 0; scaleMatrix[4] = 0;
-		scaleMatrix[6] = 0;scaleMatrix[7] = 0;scaleMatrix[8] = 0;scaleMatrix[9] = 0;
-		scaleMatrix[11] = 0; scaleMatrix[12] = 0; scaleMatrix[13] = 0; scaleMatrix[14] = 0;
-		scaleMatrix[15] = 1;
-
-		let product = new Float32Array(16);
-		this.multiply(scaleMatrix, modelMatrix, product);
-		for(let i = 0; i < modelMatrix.length; i++){
-			modelMatrix[i] = product[i];
-		}
+		modelMatrix[0] = x; modelMatrix[5] = y; modelMatrix[10] = z; 
+		modelMatrix[1] = 0;modelMatrix[2] = 0;modelMatrix[3] = 0; modelMatrix[4] = 0;
+		modelMatrix[6] = 0;modelMatrix[7] = 0;modelMatrix[8] = 0;modelMatrix[9] = 0;
+		modelMatrix[11] = 0; modelMatrix[12] = 0; modelMatrix[13] = 0; modelMatrix[14] = 0;
+		modelMatrix[15] = 1;
 	}
 	static rotate(matrix, angle, axis){
 		let theta = degreesToRadians(angle);
