@@ -1,4 +1,6 @@
 var gl;//Rendering context
+var renderer;//Handles rendering of graphics
+var keyboard;//Handles keyboard input
 var shaderPrograms = []; //Container for shader programs created
 var shader;//Shader program object
 var shaderName;
@@ -31,7 +33,28 @@ var renderLoop = function(last){
 	renderer.deltaTime = (current - last) * scale;
 	angle +=  velocity * renderer.deltaTime;
 	last = current;
+	let cameraSpeed = 0.001;
+	let camFront = renderer.cam.Front;
 	
+	if(keyboard.buttons['W']){
+		camFront.scalarMultiply(cameraSpeed);
+		renderer.cam.Position = vector.add(renderer.cam.Position, camFront);
+	}
+	if(keyboard.buttons['S']){
+		camFront.scalarMultiply(cameraSpeed);
+		renderer.cam.Position = vector.subtract(renderer.cam.Position, camFront);
+	}
+	if(keyboard.buttons['A']){
+		let temp = vector.cross(renderer.cam.Front, renderer.cam.Up).normalize();
+		temp.scalarMultiply(cameraSpeed);
+		renderer.cam.Position = vector.subtract(renderer.cam.Position, temp);
+	}
+	if(keyboard.buttons['D']){
+		let temp = vector.cross(renderer.cam.Front, renderer.cam.Up).normalize();
+		temp.scalarMultiply(cameraSpeed);
+		renderer.cam.Position = vector.add(renderer.cam.Position, temp);
+	}
+
 	renderer.update();
 	triangle.update(angle);
 
@@ -54,6 +77,8 @@ function init(){
 	console.log('Running');
 	renderer = new RenderManager("game_canvas");
 	gl = renderer.gl;
+	keyboard = new KeyBoard();
+
 	shaderName = 'triangle';
 	var triangleShader = new CreateShader(gl);
 	textureName = 'blue_sky';

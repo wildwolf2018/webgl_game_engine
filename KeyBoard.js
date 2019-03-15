@@ -1,61 +1,56 @@
 class KeyBoard
 {
-	constructor(canvas)
+	constructor()
 	{
+		this.pressed = false;
 		//Current state of the buttons
-		this.buttons[] = {'65': false, '68': false, '83': false, '87': false};
+		this.buttons = {'A': false, 'D': false, 'S': false, 'W': false};
 		//Indicates which buttons are pressed during current frame
-		this.buttonsDown[] = {'65': false, '68': false, '83': false, '87': false};
+		this.buttonsDown = {'A': false, 'D': false, 'S': false, 'W': false};
 		//Indicates which buttons are released during current frame
-		this.buttonsUp[] = {'65': false, '68': false, '83': false, '87': false};
-		this.canvas = canvas;
-		//Buttons' event handlers
-		this.canvas.onkeydown = function(event) {keyDown(event);}
-		this.canvas.onkeyup = function(event) {keyUp(event);}
+		this.buttonsUp = {'A': false, 'D': false, 'S': false, 'W': false};
+
+		//Buttons' events
+		//keyboard is globally created object of type KeyBoard 
+		document.onkeydown = function(event) { 
+			keyboard.pressed = true;
+			keyboard.keyPress(event);
+		};
+		document.onkeyup = function(event) { 
+			keyboard.pressed = false;
+			keyboard.keyPress(event);
+		};
 	}
 
-	//Handles the event when a button is pressed
-	keyDown(event){ 
-		let char = String.fromChar(event.which);
-		if(char == '65' || char == '68' || char == '83' || char == '87'){
-			if(this.buttons[char] == false){
+	//Handles the event when a button is pressed or released
+	keyPress(event){
+		let char = String.fromCharCode(event.keyCode);
+		if(char == 'A' || char == 'D' || char == 'S' || char == 'W'){
+			if(this.buttons[char] == false && this.pressed == true){
 				this.buttonsDown[char] = true;
 				this.buttonsUp[char] = false;
 			}
-			this.buttons[char] = true;
-			this.keyReleased = false;
-		}
-	}
 
-	//Handles the event when a button is released
-	keyUp(event){
-		let char = String.fromChar(event.which);
-		if(char == '65' || char == '68' || char == '83' || char == '87'){
-			if(this.buttons[char] == false){
+			if(this.buttons[char] == true && this.pressed == false){
 				this.buttonsDown[char] = false;
 				this.buttonsUp[char] = true;
 			}
-			this.buttons[char] = false;
+			this.buttons[char] = this.pressed;
 		}
 	}
-	
-	get isKeyDown(key)
-	{
+
+	isKeyDown(key){
 		let state = this.buttons[key];
 		this.buttonsDown[key] = false;
 		return state;
 	}
 	
-	get isKeyUp(key)
-	{
+	isKeyUp(key){
 		let state = this.buttons[key];
 		this.buttonsUp[key] = false;
 		return state;
 	}
 	
 	//Gets the current state of the button
-	buttonState(key)
-	{
-		return this.buttons[key];
-	}
+	buttonState(key){ return this.buttons[key];}
 }

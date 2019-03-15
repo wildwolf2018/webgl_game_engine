@@ -3,10 +3,8 @@ function Triangle(gl, ext, programID){
 	this.gl = gl;
 	this.ext = ext;
 	this.vao = null;
-	this.program = programID;	
-	this.matrices = {};
-	this.rotation = Symbol("rotation"); this.worldMatrix = Symbol("worldMatrix");this.scale = Symbol("scale");
-
+	this.program = programID;
+	this.map = new Map();	
 	this.draw = function(){
 		var that = this.gl;
 		var _ext = this.ext;
@@ -17,9 +15,10 @@ function Triangle(gl, ext, programID){
 	this.update = function(angle){
 		let axis = new vector(0.0, 0.0, 1.0);
 		let q = Quaternion.createRotationQuat(axis, angle);
-		matrix4.identity(this.matrices[this.rotation]);
-		q.setRotationMatrix(this.matrices[this.rotation]);
-		matrix4.multiply(this.matrices[this.rotation], this.matrices[this.scale], this.matrices[this.worldMatrix]);
+		let _map = this.map;
+		matrix4.identity(_map.get("rotate"));
+		q.setRotationMatrix(_map.get("rotate"));
+		matrix4.multiply(_map.get("rotate"), _map.get("scale"), _map.get("model"));
 	}
 }
 
@@ -62,12 +61,12 @@ Triangle.prototype = {
 		that.enableVertexAttribArray(vertTexLocation);
 		ext_.bindVertexArrayOES(null);
 
-        this.matrices[this.scale] = new Float32Array(16);
-        this.matrices[this.rotation] = new Float32Array(16);
-        this.matrices[this.worldMatrix] = new Float32Array(16);
-		matrix4.identity(this.matrices[this.scale]);
-		matrix4.scale(this.matrices[this.scale], 1.0, 1.0, 0.0);
-		
+		let _map = this.map;
+        _map.set("scale", new Float32Array(16));// Scale matrix
+        _map.set("rotate", new Float32Array(16)); // Rotation matrix
+        _map.set("model", new Float32Array(16));// Model matrix
+        matrix4.identity(_map.get("scale"));
+        matrix4.scale(_map.get("scale"), 1.0, 1.0, 1.0);
 	},
 	setMatrixUniform: function(name, matrix){
 		var location = gl.getUniformLocation(this.program, name);
@@ -76,6 +75,6 @@ Triangle.prototype = {
 
 	setMatrixUniforms(shader)
 	{
-		shader.setMatrixUniform('mWorld', this.matrices[this.worldMatrix]);
+		shader.setMatrixUniform('mWorld', this.map.get("model"));
 	}
 }
